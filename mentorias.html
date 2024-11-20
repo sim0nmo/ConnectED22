@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentorías - ConnectEd</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 1.5rem 0;
+            color: #00a478;
+            font-size: 2rem;
+        }
+
+        p {
+            text-align: center;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .mentorias-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .mentoria-card {
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .mentoria-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .mentoria-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mentoria-card h3 {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+            color: #00a478;
+        }
+
+        .mentoria-card p {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .join-button {
+            padding: 0.5rem 1rem;
+            background-color: #00a478;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+
+        .join-button:hover {
+            background-color: #007d5f;
+        }
+
+        .joined-message {
+            margin-top: 0.5rem;
+            color: #007d5f;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: none;
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin: 1.5rem auto;
+            max-width: 200px;
+            padding: 0.8rem 1rem;
+            background-color: #ff6464;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #e04c4c;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Mentorías Disponibles</h1>
+    <p id="course-selected">Cargando mentorías relacionadas con tu curso...</p>
+
+    <div class="mentorias-container" id="mentorias-container"></div>
+
+    <a href="cursos.html" class="back-button">Volver a Cursos</a>
+
+    <script>
+        // Mentorías relacionadas con todos los cursos
+        const mentorias = {
+            "Curso de Administración": [
+                { title: "Liderazgo Efectivo", mentor: "Carlos Díaz", emoji: "📈" },
+                { title: "Gestión de Proyectos", mentor: "Ana Gómez", emoji: "📋" },
+            ],
+            "Biología Molecular": [
+                { title: "Genética Avanzada", mentor: "Dra. María Pérez", emoji: "🧬" },
+                { title: "Microbiología Básica", mentor: "Dr. Luis García", emoji: "🔬" },
+            ],
+            "Diseño Gráfico Digital": [
+                { title: "Photoshop Avanzado", mentor: "Luisa Ortega", emoji: "🎨" },
+                { title: "Illustrator desde Cero", mentor: "Fernando Salas", emoji: "🖌️" },
+            ],
+            "Introducción a Ingeniería Civil": [
+                { title: "Estructuras Básicas", mentor: "David Ramos", emoji: "🏗️" },
+                { title: "Materiales de Construcción", mentor: "Sofía Gutiérrez", emoji: "🔩" },
+            ],
+            "Marketing Estratégico": [
+                { title: "Estrategias de Marketing Digital", mentor: "Laura García", emoji: "💻" },
+                { title: "Análisis de Mercado", mentor: "Pedro Rodríguez", emoji: "📊" },
+            ],
+            "Ecología y Medio Ambiente": [
+                { title: "Sostenibilidad Ambiental", mentor: "Clara Pérez", emoji: "🌱" },
+                { title: "Protección de Ecosistemas", mentor: "Carlos López", emoji: "🐾" },
+            ],
+            "Historia de Ciencias Políticas": [
+                { title: "Historia Moderna", mentor: "Jorge Gómez", emoji: "📜" },
+                { title: "Ciencias Políticas Contemporáneas", mentor: "María Sánchez", emoji: "🏛️" },
+            ],
+            "Desarrollo Web Frontend": [
+                { title: "HTML y CSS Avanzado", mentor: "Ana Ruiz", emoji: "🌐" },
+                { title: "JavaScript desde Cero", mentor: "Carlos Ortega", emoji: "💻" },
+            ],
+            "Diseño de Interiores": [
+                { title: "Diseño de Espacios", mentor: "Elena Ramos", emoji: "🏠" },
+                { title: "Técnicas de Iluminación", mentor: "Luis Pérez", emoji: "💡" },
+            ],
+            "Gestión de Recursos Humanos": [
+                { title: "Contratación y Selección", mentor: "Rosa Gómez", emoji: "📋" },
+                { title: "Liderazgo Organizacional", mentor: "Mario López", emoji: "👥" },
+            ],
+            "Genética Avanzada": [
+                { title: "Análisis de ADN", mentor: "Dra. Laura Mendoza", emoji: "🧬" },
+                { title: "Genética Molecular", mentor: "Dr. Manuel Rodríguez", emoji: "🔬" },
+            ],
+            "Economía Aplicada": [
+                { title: "Análisis Económico", mentor: "José Martínez", emoji: "📊" },
+                { title: "Microeconomía y Macroeconomía", mentor: "Sandra Pérez", emoji: "💹" },
+            ],
+            "Arquitectura Sostenible": [
+                { title: "Construcción Ecológica", mentor: "Ricardo Díaz", emoji: "🏡" },
+                { title: "Diseño Sustentable", mentor: "Clara López", emoji: "♻️" },
+            ],
+            "Cálculo para Ingenieros": [
+                { title: "Cálculo Diferencial", mentor: "Carlos Gómez", emoji: "➗" },
+                { title: "Cálculo Integral", mentor: "Marta Sánchez", emoji: "∫" },
+            ],
+            "Microbiología Básica": [
+                { title: "Técnicas de Cultivo", mentor: "Luis García", emoji: "🦠" },
+                { title: "Microorganismos en Biotecnología", mentor: "Claudia Romero", emoji: "🔬" },
+            ],
+            "Introducción a la Programación": [
+                { title: "Programación con Python", mentor: "Jorge Díaz", emoji: "🐍" },
+                { title: "Conceptos Básicos de Algoritmos", mentor: "Ana Pérez", emoji: "📐" },
+            ],
+            "Fotografía Publicitaria": [
+                { title: "Fotografía de Producto", mentor: "Luis Sánchez", emoji: "📷" },
+                { title: "Edición con Lightroom", mentor: "María López", emoji: "🎞️" },
+            ],
+            "Relaciones Internacionales": [
+                { title: "Geopolítica Mundial", mentor: "Carmen Díaz", emoji: "🌍" },
+                { title: "Diplomacia Internacional", mentor: "Carlos Mendoza", emoji: "🤝" },
+            ],
+            "Contabilidad Financiera": [
+                { title: "Gestión Financiera", mentor: "Roberto Gómez", emoji: "📖" },
+                { title: "Presupuestos Empresariales", mentor: "Claudia Ruiz", emoji: "💵" },
+            ],
+            "Análisis de Datos": [
+                { title: "Análisis con Excel", mentor: "Ana Torres", emoji: "📊" },
+                { title: "Visualización de Datos", mentor: "Mario Ortega", emoji: "📈" },
+            ],
+        };
+
+        // Cargar mentorías relacionadas
+        const selectedCourse = localStorage.getItem("selectedCourse");
+        const mentoriasContainer = document.getElementById("mentorias-container");
+        const courseTitle = document.getElementById("course-selected");
+
+        if (selectedCourse && mentorias[selectedCourse]) {
+            courseTitle.textContent = `Mentorías para el curso: ${selectedCourse}`;
+            mentorias[selectedCourse].forEach((mentoria, index) => {
+                const card = document.createElement("div");
+                card.classList.add("mentoria-card");
+                card.innerHTML = `
+                    <div class="mentoria-emoji">${mentoria.emoji}</div>
+                    <h3>${mentoria.title}</h3>
+                    <p>Mentor: ${mentoria.mentor}</p>
+                    <button class="join-button" onclick="joinMentoria(${index})">Unirse</button>
+                    <div class="joined-message" id="joined-${index}">Te has unido a esta mentoría.</div>
+                `;
+                mentoriasContainer.appendChild(card);
+            });
+        } else {
+            courseTitle.textContent = "No se encontraron mentorías para el curso seleccionado.";
+        }
+
+        // Unirse a una mentoría
+        const joinMentoria = (index) => {
+            const joinedMessage = document.getElementById(`joined-${index}`);
+            joinedMessage.style.display = "block";
+        };
+    </script>
+</body>
+</html>
